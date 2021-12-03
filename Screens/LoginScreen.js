@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button, Image, Input } from "react-native-elements";
 import { Icon } from "react-native-elements";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation, ...props }) => {
   const [show, setShow] = useState(true);
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -74,6 +74,7 @@ const LoginScreen = () => {
           shadowRadius: 4.65,
           elevation: 7,
         }}
+        disabled={email && password ? false : true }
         onPress={signInHandler}
       />
 
@@ -86,7 +87,7 @@ const LoginScreen = () => {
         }}
       >
         <Text>Don't have an account?</Text>
-        <Button title="Register" type="clear" />
+        <Button title="Register" type="clear" onPress={() => navigation.navigate('Register')} />
       </View>
     </View>
   );
