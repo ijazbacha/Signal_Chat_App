@@ -57,6 +57,7 @@ const LoginScreen = ({ navigation, ...props }) => {
           }
           value={password}
           onChangeText={(value) => setPassword(value)}
+          onSubmitEditing={signInHandler}
         />
       </View>
 
