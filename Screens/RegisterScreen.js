@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import { Button, Icon, Input, Text } from "react-native-elements";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -11,8 +11,13 @@ const RegisterScreen = ({ navigation, ...props }) => {
   const [password, setPassword] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackTitle: "Back to Login"
+    })
+  }, [navigation])
+
   const registerHandler = () => {
-   
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
@@ -25,11 +30,8 @@ const RegisterScreen = ({ navigation, ...props }) => {
     
       })
       
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
+      .catch((error) => alert(error.message));
+      
       navigation.navigate("Login")
   };
 

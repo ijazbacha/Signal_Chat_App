@@ -1,20 +1,32 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Image, Input } from "react-native-elements";
 import { Icon } from "react-native-elements";
+import { auth } from "../Firebase/Firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation, ...props }) => {
   const [show, setShow] = useState(true);
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const signInHandler = () =>(
-      console.log(email, password),
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        navigation.replace("Home");
+      }
+    });
 
-      setPassword(""),
-      setEmail("")
-  )
+    return unsubscribe;
+  }, []);
+
+  const signInHandler = () => {
+    signInWithEmailAndPassword(auth, email, password).catch((error) =>
+      alert(error)
+    );
+  };
+
   return (
     <View style={styles.LoginContainer}>
       <StatusBar style="light" />
@@ -75,7 +87,7 @@ const LoginScreen = ({ navigation, ...props }) => {
           shadowRadius: 4.65,
           elevation: 7,
         }}
-        disabled={email && password ? false : true }
+        disabled={email && password ? false : true}
         onPress={signInHandler}
       />
 
@@ -88,7 +100,11 @@ const LoginScreen = ({ navigation, ...props }) => {
         }}
       >
         <Text>Don't have an account?</Text>
-        <Button title="Register" type="clear" onPress={() => navigation.navigate('Register')} />
+        <Button
+          title="Register"
+          type="clear"
+          onPress={() => navigation.navigate("Register")}
+        />
       </View>
     </View>
   );
