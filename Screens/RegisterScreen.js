@@ -23,7 +23,7 @@ const RegisterScreen = ({ navigation, ...props }) => {
         // Signed in
         const user = userCredential.user.providerData({
           displayName: fullName,
-          photoUrl:
+          photoURL:
             imageUrl ||
             "https://www.clipartmax.com/png/middle/171-1717870_stockvader-predicted-cron-for-may-user-profile-icon-png.png",
         });
