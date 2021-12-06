@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import { Button, Icon, Input, Text } from "react-native-elements";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase/Firebase";
 
 const RegisterScreen = ({ navigation, ...props }) => {
   const [show, setShow] = useState(true);
@@ -10,7 +12,25 @@ const RegisterScreen = ({ navigation, ...props }) => {
   const [imageUrl, setImageUrl] = useState("");
 
   const registerHandler = () => {
-    return console.log(" submitted data", fullName, email, password, imageUrl);
+   
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user.providerData({
+          displayName: fullName,
+          photoUrl:
+            imageUrl ||
+            "https://www.clipartmax.com/png/middle/171-1717870_stockvader-predicted-cron-for-may-user-profile-icon-png.png",
+        });
+    
+      })
+      
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+      navigation.navigate("Login")
   };
 
   return (
