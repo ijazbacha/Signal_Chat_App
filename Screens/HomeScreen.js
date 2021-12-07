@@ -47,7 +47,7 @@ const HomeScreen = ({ navigation, ...props }) => {
               color="black"
             />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("AddChat")}>
             <Icon
               name="create-outline"
               type="ionicon"
