@@ -1,12 +1,31 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { signOut } from "firebase/auth";
-import { auth } from "../Firebase/Firebase";
+import { auth, db } from "../Firebase/Firebase";
 import { SafeAreaView } from "react-native";
 import CustomListItem from "../Components/CustomListItem";
 import { Avatar, Icon } from "react-native-elements";
+import { collection, getDocs } from "firebase/firestore";
 
 const HomeScreen = ({ navigation, ...props }) => {
+  const [chats, setChats] = useState([]);
+
+  useEffect( async () => {
+    
+    const querySnapshot = await getDocs(collection(db, "chats"));
+    // console.log('====================================');
+    // console.log("querySnapshot", querySnapshot);
+    // console.log('====================================');
+    
+    setChats(
+      querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }))
+    );
+    return querySnapshot;
+  }, []);
+
   const logOutHandler = () => {
     signOut(auth)
       .then(() => {
@@ -39,30 +58,38 @@ const HomeScreen = ({ navigation, ...props }) => {
       ),
 
       headerRight: () => (
-        <View style={{ flexDirection:"row", marginRight:10, width:60, justifyContent:"space-between"}}>
+        <View
+          style={{
+            flexDirection: "row",
+            marginRight: 10,
+            width: 60,
+            justifyContent: "space-between",
+          }}
+        >
           <TouchableOpacity activeOpacity={0.5}>
-            <Icon
-              name="camera-outline"
-              type="ionicon"
-              color="black"
-            />
+            <Icon name="camera-outline" type="ionicon" color="black" />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("AddChat")}>
-            <Icon
-              name="create-outline"
-              type="ionicon"
-              color="black"
-            />
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => navigation.navigate("AddChat")}
+          >
+            <Icon name="create-outline" type="ionicon" color="black" />
           </TouchableOpacity>
         </View>
       ),
     });
   }, [navigation]);
 
+  console.log("====================================");
+  console.log("chats", chats);
+  console.log("====================================");
+
   return (
     <SafeAreaView>
-      <ScrollView>
-        <CustomListItem />
+      <ScrollView style={{ height: "100%"}}>
+        {chats.map(({ id, data: { chatName } }) => (
+          <CustomListItem key={id} id={id} chatName={chatName} />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

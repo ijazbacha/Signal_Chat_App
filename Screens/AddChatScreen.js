@@ -20,7 +20,7 @@ const AddChatScreen = ({ navigation }) => {
       const docRef = await addDoc(collection(db, "chats"), {
         chatName: chatName,
       }).then(() =>{
-          navigation.goBack()
+          navigation.navigate("Home")
       })
       console.log("Document written with ID: ", docRef);
     } catch (e) {
@@ -33,7 +33,6 @@ const AddChatScreen = ({ navigation }) => {
       <Input
         placeholder="Enter a chat name"
         autoFocus
-        onEndEditing={createChat}
         value={chatName}
         onChangeText={(value) => setChatName(value)}
         leftIcon={
