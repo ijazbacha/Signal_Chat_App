@@ -4,9 +4,9 @@ import { auth } from "../Firebase/Firebase";
 
 const photoURL = "https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2017/11/avatar-generators.jpg?q=50&fit=contain&w=750&h=375&dpr=1.5"
 
-const CustomListItem = ({ id, chatName, ...props}) => {
+const CustomListItem = ({ id, chatName, enterChat, ...props}) => {
   return (
-    <ListItem key={id} bottomDivider>
+    <ListItem key={id} bottomDivider onPress={() => enterChat()} >
       <Avatar
         rounded
         source={{
